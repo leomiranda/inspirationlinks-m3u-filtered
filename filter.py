@@ -1,4 +1,6 @@
 import requests
+import re
+import unicodedata
 
 url = "https://raw.githubusercontent.com/inspirationlinks/m3u/refs/heads/live/Freetv.m3u"
 response = requests.get(url)
@@ -8,8 +10,16 @@ blocked_terms = [
     "adult", "erotic", "xxx", "porn", "sexo", "18+", "hot", "onlyfans", "nsfw"
 ]
 
+def normalize(text):
+    # Remove acentos, transforma em minúsculo e remove caracteres especiais
+    text = unicodedata.normalize('NFKD', text)
+    text = ''.join([c for c in text if not unicodedata.combining(c)])
+    text = re.sub(r'[^a-zA-Z0-9 ]', '', text)
+    return text.lower()
+
 def is_blocked(line):
-    return any(term in line.lower() for term in blocked_terms)
+    norm_line = normalize(line)
+    return any(term in norm_line for term in blocked_terms)
 
 filtered_lines = [line for line in response.text.split('\n') if not is_blocked(line)]
 
