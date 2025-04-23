@@ -1,0 +1,25 @@
+name: Filter M3U
+on:
+  schedule:
+    - cron: '0 */6 * * *' # Check every 6 hours
+  workflow_dispatch:
+jobs:
+  filter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Filter playlist
+        run: |
+          pip install requests
+          python filter.py
+      - name: Commit changes
+        run: |
+          git config --global user.email "github@github.com"
+          git config --global user.name "GitHub Actions"
+          git add Freetv-filtered.m3u
+          git commit -m "Update filtered playlist"
+          git push
