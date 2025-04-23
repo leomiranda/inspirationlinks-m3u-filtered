@@ -16,10 +16,13 @@ jobs:
         run: |
           pip install requests
           python filter.py
+      - name: Set up GitHub token
+        run: |
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
       - name: Commit changes
         run: |
           git config --global user.email "github@github.com"
           git config --global user.name "GitHub Actions"
           git add Freetv-filtered.m3u
-          git commit -m "Update filtered playlist"
+          git commit -m "Update filtered playlist" || echo "No changes to commit"
           git push
