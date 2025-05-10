@@ -2,7 +2,7 @@ import requests
 import re
 import unicodedata
 
-url = "https://raw.githubusercontent.com/inspirationlinks/m3u/refs/heads/live/Freetv.m3u"
+url = "https://raw.githubusercontent.com/inspirationlinks/m3u/refs/heads/live/InspirationLinks.m3u"
 response = requests.get(url)
 
 # Lista de termos a serem filtrados (adicione ou remova conforme necessário)
